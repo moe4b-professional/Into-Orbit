@@ -1597,13 +1597,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5570137032449040948, guid: 3ca4cc390cdc96e4cb317ea50bfbe67e,
         type: 3}
-      propertyPath: movement.relativeMovement
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5570137032449040948, guid: 3ca4cc390cdc96e4cb317ea50bfbe67e,
-        type: 3}
       propertyPath: oxygen._value
-      value: 100000
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ca4cc390cdc96e4cb317ea50bfbe67e, type: 3}
