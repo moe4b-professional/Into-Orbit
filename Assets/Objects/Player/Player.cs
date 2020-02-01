@@ -157,7 +157,7 @@ namespace Game
 
                 player.weapon.laser.enabled = input.magnitude > 0f;
 
-                if (input.magnitude == 0f)
+                if (input.magnitude == 0f && player.weapon.clutch.Input.Axis == 0f)
                 {
                     input = player.input.Move;
                     sensitivity /= 2f;
@@ -389,8 +389,6 @@ namespace Game
                     {
                         var element = queue.Dequeue();
 
-                        Debug.Log(element);
-
                         Action(element, player.transform.forward);
                     }
                 }
@@ -424,6 +422,8 @@ namespace Game
 
                 public SpringJoint joint;
 
+                public Vector3 anchor;
+
                 public float spring = 10;
                 public float damper = 0.2f;
                 public float tolerance = 0.025f;
@@ -431,9 +431,9 @@ namespace Game
                 public float massScale = 40;
                 public float connectedMassScale = 40;
 
-                RaycastHit hit;
+                public Rigidbody target;
 
-                public Rigidbody anchor;
+                RaycastHit hit;
 
                 Player player;
                 public void Init(Player reference)
@@ -463,12 +463,10 @@ namespace Game
                     if(Physics.SphereCast(transform.position, radius, transform.forward, out hit, range, player.mask))
                     {
                         Connect(hit.rigidbody, hit.point);
-
-                        Debug.Log("Did HIT");
                     }
                     else
                     {
-                        Debug.Log("Did NOT HIT");
+                        
                     }
                 }
 
@@ -480,8 +478,9 @@ namespace Game
                     }
                     else
                     {
-                        joint = anchor.gameObject.AddComponent<SpringJoint>();
+                        joint = target.gameObject.AddComponent<SpringJoint>();
 
+                        joint.anchor = anchor;
                         joint.connectedBody = rigidbody;
                         joint.anchor = Vector3.zero;
                         joint.autoConfigureConnectedAnchor = false;

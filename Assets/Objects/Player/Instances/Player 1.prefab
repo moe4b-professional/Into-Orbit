@@ -46,7 +46,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!1 &1576613702
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,12 +421,13 @@ MonoBehaviour:
       range: 1.21
       radius: 0.25
       joint: {fileID: 0}
+      anchor: {x: 0, y: 0, z: 1}
       spring: 10
       damper: 0.2
       tolerance: 0
       massScale: 40
       connectedMassScale: 40
-      anchor: {fileID: 8779768450319111763}
+      target: {fileID: 8779768450319111763}
     laser:
       renderer: {fileID: 1576613704}
 --- !u!54 &8779768450319111763
