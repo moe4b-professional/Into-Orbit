@@ -28,6 +28,8 @@ namespace Game
 
         public PlayerIndex index;
 
+        public LayerMask mask = Physics.DefaultRaycastLayers;
+
         public InputProperty input;
         [Serializable]
         public class InputProperty
@@ -152,6 +154,8 @@ namespace Game
             {
                 var input = player.input.Look;
                 var sensitivity = this.sensitivity;
+
+                player.weapon.laser.enabled = input.magnitude > 0f;
 
                 if (input.magnitude == 0f)
                 {
@@ -312,15 +316,13 @@ namespace Game
         [Serializable]
         public class WeaponProperty
         {
+            public Transform transform;
+
             public LaunchProperty launch;
             [Serializable]
             public class LaunchProperty
             {
-                public Transform transform;
-
                 public float range;
-
-                public LayerMask mask;
 
                 public float radius;
 
@@ -340,6 +342,8 @@ namespace Game
                     player.OnProcess += Process;
                 }
 
+                public Transform transform => player.weapon.transform;
+
                 private void Process()
                 {
                     if(Input.Button.Press)
@@ -357,7 +361,7 @@ namespace Game
                         player.rigidbody.velocity = Vector3.zero;
                         Action(player.rigidbody, -player.transform.forward);
 
-                        hits = Physics.SphereCastAll(transform.position, radius, transform.forward, range, mask);
+                        hits = Physics.SphereCastAll(transform.position, radius, transform.forward, range, player.mask);
 
                         for (int i = 0; i < hits.Length; i++)
                         {
@@ -401,7 +405,7 @@ namespace Game
                 public void OnDrawGizmos(Player player)
                 {
 #if UNITY_EDITOR
-                    Gizmos.matrix = transform.localToWorldMatrix;
+                    Gizmos.matrix = player.weapon.transform.localToWorldMatrix;
                     Gizmos.color = Color.green;
                     Gizmos.DrawWireCube(Vector3.forward * range / 2f, new Vector3(radius, radius, range));
 #endif
@@ -414,10 +418,136 @@ namespace Game
             {
                 public InputProperty.DualActionInput Input => player.input.SecondaryAction;
 
+                public float range;
+
+                public float radius;
+
+                public SpringJoint joint;
+
+                public float spring = 10;
+                public float damper = 0.2f;
+                public float tolerance = 0.025f;
+
+                public float massScale = 40;
+                public float connectedMassScale = 40;
+
+                RaycastHit hit;
+
+                public Rigidbody anchor;
+
                 Player player;
                 public void Init(Player reference)
                 {
                     player = reference;
+
+                    player.OnProcess += Process;
+                }
+
+                public Transform transform => player.weapon.transform;
+
+                private void Process()
+                {
+                    if(Input.Button.Press)
+                    {
+                        Detect();
+                    }
+                    
+                    if(Input.Button.Up)
+                    {
+                        Detatch();
+                    }
+                }
+
+                void Detect()
+                {
+                    if(Physics.SphereCast(transform.position, radius, transform.forward, out hit, range, player.mask))
+                    {
+                        Connect(hit.rigidbody, hit.point);
+
+                        Debug.Log("Did HIT");
+                    }
+                    else
+                    {
+                        Debug.Log("Did NOT HIT");
+                    }
+                }
+
+                void Connect(Rigidbody rigidbody, Vector3 point)
+                {
+                    if(rigidbody == null)
+                    {
+                        
+                    }
+                    else
+                    {
+                        joint = anchor.gameObject.AddComponent<SpringJoint>();
+
+                        joint.connectedBody = rigidbody;
+                        joint.anchor = Vector3.zero;
+                        joint.autoConfigureConnectedAnchor = false;
+                        joint.connectedAnchor = rigidbody.transform.InverseTransformPoint(point);
+
+                        joint.spring = spring;
+                        joint.damper = damper;
+
+                        joint.tolerance = tolerance;
+
+                        joint.massScale = massScale;
+                        joint.connectedMassScale = connectedMassScale;
+
+                        joint.enableCollision = true;
+                    }
+                }
+
+                void Detatch()
+                {
+                    Destroy(joint);
+                }
+            }
+
+            public LaserProperty laser;
+            [Serializable]
+            public class LaserProperty
+            {
+                public bool enabled
+                {
+                    get => renderer.enabled;
+                    set => renderer.enabled = value;
+                }
+
+                public LineRenderer renderer;
+
+                RaycastHit hit;
+
+                Player player;
+                public void Init(Player reference)
+                {
+                    player = reference;
+
+                    player.OnProcess += Process;
+
+                    renderer.useWorldSpace = true;
+                }
+
+                void Process()
+                {
+                    if(enabled)
+                    {
+                        renderer.SetPosition(0, renderer.transform.position);
+
+                        if (Physics.Raycast(renderer.transform.position, renderer.transform.forward, out hit, Mathf.Infinity, player.mask))
+                        {
+                            renderer.SetPosition(1, hit.point);
+                        }
+                        else
+                        {
+                            renderer.SetPosition(1, renderer.transform.position + renderer.transform.forward * 100f);
+                        }
+                    }
+                    else
+                    {
+
+                    }
                 }
             }
 
@@ -428,6 +558,7 @@ namespace Game
 
                 clutch.Init(reference);
                 launch.Init(reference);
+                laser.Init(reference);
             }
         }
 
