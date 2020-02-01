@@ -12,11 +12,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8779768450319111788, guid: b4d8ff0c522aa994dbe4c89d17410024,
-        type: 3}
-      propertyPath: oxygen._value
-      value: 100000
-      objectReference: {fileID: 0}
     - target: {fileID: 8779768450319111789, guid: b4d8ff0c522aa994dbe4c89d17410024,
         type: 3}
       propertyPath: m_LocalPosition.x

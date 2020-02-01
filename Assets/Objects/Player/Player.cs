@@ -35,8 +35,28 @@ namespace Game
             public Vector2 Move { get; protected set; }
             public Vector2 Look { get; protected set; }
 
-            public bool PrimaryAction { get; protected set; }
-            public bool SecondaryAction { get; protected set; }
+            public DualActionInput PrimaryAction { get; protected set; }
+            public DualActionInput SecondaryAction { get; protected set; }
+
+            [Serializable]
+            public class DualActionInput
+            {
+                public ButtonInput Button { get; protected set; }
+
+                public float Axis { get; protected set; }
+
+                public void Process(float axis, bool button)
+                {
+                    Button.Process(axis > 0f || button);
+
+                    this.Axis = Mathf.Clamp01(axis + (button ? 1f : 0f));
+                }
+
+                public DualActionInput()
+                {
+                    Button = new ButtonInput();
+                }
+            }
 
             Player player;
             public void Init(Player reference)
@@ -44,6 +64,9 @@ namespace Game
                 player = reference;
 
                 player.OnProcess += Process;
+
+                PrimaryAction = new DualActionInput();
+                SecondaryAction = new DualActionInput();
             }
 
             void Process()
@@ -58,8 +81,8 @@ namespace Game
                 Move = ThumbSticksToVector(state.ThumbSticks.Left);
                 Look = ThumbSticksToVector(state.ThumbSticks.Right);
 
-                PrimaryAction = state.Triggers.Right > 0f || state.Buttons.RightShoulder == ButtonState.Pressed;
-                SecondaryAction = state.Triggers.Left > 0f || state.Buttons.LeftShoulder == ButtonState.Pressed;
+                PrimaryAction.Process(state.Triggers.Right, state.Buttons.RightShoulder == ButtonState.Pressed);
+                SecondaryAction.Process(state.Triggers.Left, state.Buttons.LeftShoulder == ButtonState.Pressed);
             }
 
             public static Vector2 ThumbSticksToVector(GamePadThumbSticks.StickValue value)
@@ -127,9 +150,18 @@ namespace Game
 
             void Process()
             {
-                if(player.input.Look.magnitude > 0f)
+                var input = player.input.Look;
+                var sensitivity = this.sensitivity;
+
+                if (input.magnitude == 0f)
                 {
-                    angle = Utility.Vector2Angle(player.input.Look);
+                    input = player.input.Move;
+                    sensitivity /= 2f;
+                }
+
+                if (input.magnitude > 0f)
+                {
+                    angle = Utility.Vector2Angle(input);
 
                     var angles = player.transform.localEulerAngles;
 
@@ -276,6 +308,71 @@ namespace Game
             }
         }
 
+        public WeaponProperty weapon;
+        [Serializable]
+        public class WeaponProperty
+        {
+            public LaunchProperty launch;
+            [Serializable]
+            public class LaunchProperty
+            {
+                public float force;
+
+                public float oxygenConsumption;
+
+                public InputProperty.DualActionInput Input => player.input.PrimaryAction;
+
+                Player player;
+                public void Init(Player reference)
+                {
+                    player = reference;
+
+                    player.OnProcess += Process;
+                }
+
+                private void Process()
+                {
+                    if(Input.Button.Press)
+                    {
+                        Action();
+                    }
+                }
+
+                void Action()
+                {
+                    if(player.oxygen.value >= oxygenConsumption)
+                    {
+                        player.rigidbody.velocity = Vector3.zero;
+                        player.rigidbody.AddForce(-player.transform.forward * force, ForceMode.VelocityChange);
+
+                        player.oxygen.value -= oxygenConsumption;
+                    }
+                }
+            }
+
+            public ClutchProperty clutch;
+            [Serializable]
+            public class ClutchProperty
+            {
+                public InputProperty.DualActionInput Input => player.input.SecondaryAction;
+
+                Player player;
+                public void Init(Player reference)
+                {
+                    player = reference;
+                }
+            }
+
+            Player player;
+            public void Init(Player reference)
+            {
+                player = reference;
+
+                clutch.Init(reference);
+                launch.Init(reference);
+            }
+        }
+
         private void Start()
         {
             rigidbody = GetComponent<Rigidbody>();
@@ -285,6 +382,7 @@ namespace Game
             look.Init(this);
             oxygen.Init(this);
             thrusters.Init(this);
+            weapon.Init(this);
         }
 
         public event Action OnProcess;
