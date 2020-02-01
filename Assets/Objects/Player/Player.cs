@@ -316,11 +316,21 @@ namespace Game
             [Serializable]
             public class LaunchProperty
             {
+                public Transform transform;
+
+                public float range;
+
+                public LayerMask mask;
+
+                public float radius;
+
                 public float force;
 
                 public float oxygenConsumption;
 
                 public InputProperty.DualActionInput Input => player.input.PrimaryAction;
+
+                RaycastHit[] hits;
 
                 Player player;
                 public void Init(Player reference)
@@ -342,11 +352,59 @@ namespace Game
                 {
                     if(player.oxygen.value >= oxygenConsumption)
                     {
-                        player.rigidbody.velocity = Vector3.zero;
-                        player.rigidbody.AddForce(-player.transform.forward * force, ForceMode.VelocityChange);
-
                         player.oxygen.value -= oxygenConsumption;
+
+                        player.rigidbody.velocity = Vector3.zero;
+                        Action(player.rigidbody, -player.transform.forward);
+
+                        hits = Physics.SphereCastAll(transform.position, radius, transform.forward, range, mask);
+
+                        for (int i = 0; i < hits.Length; i++)
+                        {
+                            Action(hits);
+                        }
                     }
+                }
+
+                void Action(IList<RaycastHit> list)
+                {
+                    var queue = new Queue<Rigidbody>();
+
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        if (list[i].rigidbody == null) continue;
+
+                        if (list[i].rigidbody == player.rigidbody) continue;
+
+                        if (queue.Contains(list[i].rigidbody)) continue;
+
+                        queue.Enqueue(list[i].rigidbody);
+                    }
+
+                    while(queue.Count > 0)
+                    {
+                        var element = queue.Dequeue();
+
+                        Debug.Log(element);
+
+                        Action(element, player.transform.forward);
+                    }
+                }
+
+                void Action(Rigidbody rigidbody, Vector3 direction)
+                {
+                    rigidbody.velocity = Vector3.one;
+
+                    rigidbody.AddForce(direction * force, ForceMode.VelocityChange);
+                }
+
+                public void OnDrawGizmos(Player player)
+                {
+#if UNITY_EDITOR
+                    Gizmos.matrix = transform.localToWorldMatrix;
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawWireCube(Vector3.forward * range / 2f, new Vector3(radius, radius, range));
+#endif
                 }
             }
 
@@ -401,6 +459,14 @@ namespace Game
         private void OnTriggerExit(Collider other)
         {
             TriggerStayExit?.Invoke(other);
+        }
+
+        public event Action DrawGizmosEvent;
+        private void OnDrawGizmos()
+        {
+            DrawGizmosEvent?.Invoke();
+
+            weapon.launch.OnDrawGizmos(this);
         }
     }
 #pragma warning restore CS0108
