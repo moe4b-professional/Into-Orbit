@@ -21,13 +21,18 @@ namespace Game
 {
 	public class Thruster : MonoBehaviour
 	{
-        public Transform target;
+        public ParticleSystem particles;
+
+        public float minLifeTime;
+        public float maxLifeTime = 0.5f;
 
 		public float rate
         {
             set
             {
-                target.localScale = Vector3.one * value * 0.5f;
+                var main = particles.main;
+
+                main.startLifetime = Mathf.Lerp(minLifeTime, maxLifeTime, value);
             }
         }
 	}
