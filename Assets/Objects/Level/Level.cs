@@ -30,7 +30,13 @@ namespace Game
         public Player player1;
         public Player player2;
 
+        public SpaceShip ship;
+
         public GameCamera gameCamera;
+
+        public WinScreen winScreen;
+
+        public LoseScreen loseScreen;
 
         public LevelState state = LevelState.Idle;
 
@@ -42,6 +48,21 @@ namespace Game
         private void Start()
         {
             titleScreen.IsOn = true;
+
+            ship.OnAllPartsAligned.AddListener(AllPartsAlignedCallback);
+
+            player1.oxygen.onValueChange.AddListener(PlayerOxygenChange);
+            player2.oxygen.onValueChange.AddListener(PlayerOxygenChange);
+
+            ship.oxygen.onSupplyChange.AddListener(ShipOxygenChangeCallback);
+        }
+
+        private void Update()
+        {
+            if(Input.GetKey(KeyCode.L) && Application.isEditor)
+            {
+                Lose("Editor Ended Game");
+            }
         }
 
         public void Play()
@@ -54,12 +75,40 @@ namespace Game
             {
                 gameCamera.PlayPanDown();
 
-                yield return new WaitForSeconds(3.1f);
+                yield return new WaitForSeconds(2.3f);
 
                 HUDScreen.IsOn = true;
                 HUDScreen.Alpha = 0f;
                 HUDScreen.Fade(1f);
             }
+        }
+
+        void AllPartsAlignedCallback()
+        {
+            Win();
+        }
+
+        void Win()
+        {
+            Debug.Log("Win");
+
+            winScreen.Show();
+        }
+
+        void PlayerOxygenChange(float newValue)
+        {
+            if (player1.oxygen.value == 0f && player2.oxygen.value == 0f)
+                Lose("Oxygen Supply Depleted");
+        }
+        void ShipOxygenChangeCallback(float newValue)
+        {
+            if (ship.oxygen.Supply == 0f)
+                Lose("All Oxygen Lost");
+        }
+
+        void Lose(string reason)
+        {
+            loseScreen.Show(reason);
         }
     }
 

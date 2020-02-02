@@ -16,6 +16,7 @@ using UnityEditorInternal;
 
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
+using UnityEngine.Events;
 
 namespace Game
 {
@@ -56,14 +57,40 @@ namespace Game
             }
         }
 
+        public PartSlot[] slots;
+        public bool AllPartsAligned
+        {
+            get
+            {
+                for (int i = 0; i < slots.Length; i++)
+                    if (slots[i].isAligned == false) return false;
+
+                return true;
+            }
+        }
+
         private void Start()
         {
             oxygen.Init(this);
+
+            foreach (var slot in slots)
+            {
+                slot.OnAlign.AddListener(OnPartAlign);
+            }
         }
 
         private void Update()
         {
             oxygen.Process();
+        }
+
+        public UnityEvent OnAllPartsAligned;
+        void OnPartAlign()
+        {
+            if(AllPartsAligned)
+            {
+                OnAllPartsAligned.Invoke();
+            }
         }
     }
 }

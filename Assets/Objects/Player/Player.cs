@@ -163,7 +163,11 @@ namespace Game
                     sensitivity /= 2f;
                 }
 
-                if (input.magnitude > 0f)
+                if(player.weapon.clutch.joint != null)
+                {
+
+                }
+                else if (input.magnitude > 0f)
                 {
                     angle = Utility.Vector2Angle(input);
 
