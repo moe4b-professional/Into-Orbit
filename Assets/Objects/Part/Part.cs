@@ -24,7 +24,9 @@ namespace Game
 	{
         public Socket[] sockets;
 
+#pragma warning disable CS0108
         public Rigidbody rigidbody { get; protected set; }
+#pragma warning restore CS0108
 
         private void Awake()
         {

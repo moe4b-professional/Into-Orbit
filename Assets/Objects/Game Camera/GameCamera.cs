@@ -28,19 +28,20 @@ namespace Game
 
         public Vector2 idleRange;
 
-        Vector3 center;
+        Vector3 target;
+
+        Animator animator;
+
+        private void Start()
+        {
+            transform.position = GetCenterPosition();
+
+            animator = GetComponent<Animator>();
+        }
 
         private void LateUpdate()
         {
-            var direction = target1.position - target2.position;
-
-            center = target1.position + -direction.normalized * direction.magnitude / 2f;
-
-            var targetPosition = transform.position;
-            {
-                targetPosition.x = center.x;
-                targetPosition.z = center.z;
-            }
+            var targetPosition = GetCenterPosition();
 
             var distance = Vector3.Distance(transform.position, targetPosition);
 
@@ -54,6 +55,22 @@ namespace Game
             }
         }
 
+        public void PlayPanDown()
+        {
+            animator.Play("Pan Down");
+        }
+
+        Vector3 GetCenterPosition()
+        {
+            var direction = target1.position - target2.position;
+
+            target = target1.position + -direction.normalized * direction.magnitude / 2f;
+
+            target.y = transform.position.y;
+
+            return target;
+        }
+
         private void OnDrawGizmos()
         {
 #if UNITY_EDITOR
@@ -61,7 +78,7 @@ namespace Game
 
             Handles.DrawWireCube(Vector3.Scale(transform.position, vec), new Vector3(idleRange.x, 0f, idleRange.y));
 
-            Gizmos.DrawWireSphere(Vector3.Scale(center, vec), 0.2f);
+            Gizmos.DrawWireSphere(Vector3.Scale(target, vec), 0.2f);
 #endif
         }
 
