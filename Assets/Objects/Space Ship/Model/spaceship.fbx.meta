@@ -3,7 +3,92 @@ guid: b2449d397143f354b9aa3bd1a84b6572
 ModelImporter:
   serializedVersion: 26
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass - Blue
+    second: {fileID: 2100000, guid: 63c057f03776f764ab1c6780f2fd8d38, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Lino - Gray
+    second: {fileID: 2100000, guid: 565141bb97ed3cd4f868d73829577d1b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Alizarin
+    second: {fileID: 2100000, guid: f1759129ecbd9fd42a42f13d33a10b71, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Cobalt B
+    second: {fileID: 2100000, guid: c9b83ad5d7353104ca082b45ba294b70, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Dark Gra
+    second: {fileID: 2100000, guid: e7a3ad98ce7ac354aaf7783e28c21ed2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Ivory Bl
+    second: {fileID: 2100000, guid: c681d25c5f664c24d91ddff59385241f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Light Gr
+    second: {fileID: 2100000, guid: 1e85a4c48770802449d1a7570e706489, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Pale Jad
+    second: {fileID: 2100000, guid: 960a15760aa5dc943a67fc01ea63284b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Royal Bl
+    second: {fileID: 2100000, guid: b9c6ba4718c39c6468369e033ab95b8c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Sand Bei
+    second: {fileID: 2100000, guid: 1fb73d0cd041cf646b7a6191a44f31e1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Sienna S
+    second: {fileID: 2100000, guid: 27d19eaa5a75e3d4f9e7c9eae3936595, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Ultramar
+    second: {fileID: 2100000, guid: 26a1152e4ed7df34fa44decc4b1b43f2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Vermilio
+    second: {fileID: 2100000, guid: a66f69f3b49bb144cb9c49089e2ac226, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stucco - Yellow_
+    second: {fileID: 2100000, guid: fbf999a6b6fdc354d8f6689ff8d4b21a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tiles - Light Br
+    second: {fileID: 2100000, guid: 2604bee735962c74e850ca8fd26bb090, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood - Pine Grai
+    second: {fileID: 2100000, guid: 62d22f1f7d858774c911b8299aead387, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood - Walnut Ho
+    second: {fileID: 2100000, guid: 664dbc2c52e521e45b3e3f115e5798ff, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -81,7 +166,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.00508
+    globalScale: 0.2
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

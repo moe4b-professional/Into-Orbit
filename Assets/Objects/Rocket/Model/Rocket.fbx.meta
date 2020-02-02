@@ -3,7 +3,17 @@ guid: 831e853d79ef7d6499a8693fc23a4a73
 ModelImporter:
   serializedVersion: 26
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Lino - Blue
+    second: {fileID: 2100000, guid: cc03c38517fdc9740bd208949d1e85ff, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Vermilio
+    second: {fileID: 2100000, guid: 984e52460f6435846bc9d43e5c0a371e, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -81,7 +91,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.00508
+    globalScale: 0.2
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

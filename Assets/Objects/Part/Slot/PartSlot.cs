@@ -17,6 +17,8 @@ using UnityEditorInternal;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
+using UnityEngine.Events;
+
 namespace Game
 {
 	public class PartSlot : MonoBehaviour
@@ -42,6 +44,7 @@ namespace Game
         }
 
         public bool isAligned;
+        public UnityEvent OnAlign;
 
         private void Start()
         {
@@ -59,7 +62,11 @@ namespace Game
                 isAligned = CheckAlignment();
 
                 if (isAligned)
+                {
                     Anchor();
+
+                    OnAlign.Invoke();
+                }
             }
         }
 

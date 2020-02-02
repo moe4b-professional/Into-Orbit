@@ -3,7 +3,22 @@ guid: 7dbee14ac1d225f41af12f194d81282a
 ModelImporter:
   serializedVersion: 26
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal - Bronze
+    second: {fileID: 2100000, guid: 4bb54457d8040bf48bc63757e530baab, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Light Gr
+    second: {fileID: 2100000, guid: 2443042b2354d944185fcccdeed89b6d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paint - Sand Bei
+    second: {fileID: 2100000, guid: 69e154e0482bc1e469411155f0fc1fdd, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -81,7 +96,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.00508
+    globalScale: 0.2
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
