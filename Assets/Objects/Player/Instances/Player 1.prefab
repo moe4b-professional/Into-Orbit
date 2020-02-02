@@ -386,7 +386,7 @@ MonoBehaviour:
     force: 2
     input: {x: 0, y: 0, z: 0}
     vector: {x: 0, y: 0, z: 0}
-    oxygenConsumption: 5
+    oxygenConsumption: 2
   look:
     angle: 0
     sensitivity: 180

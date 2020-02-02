@@ -359,7 +359,7 @@ namespace Game
                         player.oxygen.value -= oxygenConsumption;
 
                         player.rigidbody.velocity = Vector3.zero;
-                        Action(player.rigidbody, -player.transform.forward);
+                        Action(player.rigidbody, -player.transform.forward, player.transform.position);
 
                         hits = Physics.SphereCastAll(transform.position, radius, transform.forward, range, player.mask);
 
@@ -372,7 +372,7 @@ namespace Game
 
                 void Action(IList<RaycastHit> list)
                 {
-                    var queue = new Queue<Rigidbody>();
+                    var hash = new HashSet<Rigidbody>();
 
                     for (int i = 0; i < list.Count; i++)
                     {
@@ -380,24 +380,19 @@ namespace Game
 
                         if (list[i].rigidbody == player.rigidbody) continue;
 
-                        if (queue.Contains(list[i].rigidbody)) continue;
+                        if (hash.Contains(list[i].rigidbody)) continue;
 
-                        queue.Enqueue(list[i].rigidbody);
-                    }
+                        hash.Add(list[i].rigidbody);
 
-                    while(queue.Count > 0)
-                    {
-                        var element = queue.Dequeue();
-
-                        Action(element, player.transform.forward);
+                        Action(list[i].rigidbody, player.transform.forward, list[i].point);
                     }
                 }
 
-                void Action(Rigidbody rigidbody, Vector3 direction)
+                void Action(Rigidbody rigidbody, Vector3 direction, Vector3 point)
                 {
                     rigidbody.velocity = Vector3.one;
 
-                    rigidbody.AddForce(direction * force, ForceMode.VelocityChange);
+                    rigidbody.AddForceAtPosition(direction * force, point, ForceMode.VelocityChange);
                 }
 
                 public void OnDrawGizmos(Player player)
