@@ -48,15 +48,18 @@ namespace Game
                 Application.Quit();
             }
 
-            if (Check(CheckControls) && controls)
+            if(controls && controlsScreen != null)
             {
-                guide.SetActive(false);
+                if (Check(CheckControls) && controls)
+                {
+                    guide.SetActive(false);
 
-                controlsScreen.Alpha = Mathf.MoveTowards(controlsScreen.Alpha, 1f, controlsScreen.fadeSpeed * Time.deltaTime);
-            }
-            else
-            {
-                controlsScreen.Alpha = Mathf.MoveTowards(controlsScreen.Alpha, 0f, controlsScreen.fadeSpeed * Time.deltaTime);
+                    controlsScreen.Alpha = Mathf.MoveTowards(controlsScreen.Alpha, 1f, controlsScreen.fadeSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    controlsScreen.Alpha = Mathf.MoveTowards(controlsScreen.Alpha, 0f, controlsScreen.fadeSpeed * Time.deltaTime);
+                }
             }
         }
 
